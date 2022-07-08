@@ -1,6 +1,7 @@
 import db from '../utils/db.util.js';
 import Boom from '@hapi/boom';
 import { hash } from 'bcrypt';
+import { uuid } from 'uuidv4';
 
 const getUsers = async () => {
   const sql = `
@@ -36,9 +37,10 @@ const getUser = async (id) => {
     FROM
       TBL_USERS
     WHERE
-      ID_USER = ?
+      ID_USER = ? OR
+      TOKEN = ?
   `;
-  const values = [id ? id : ''];
+  const values = [id ? id : '', id ? id : ''];
   const results = await db(sql, values);
   return results[0] || null;
 };
@@ -54,6 +56,7 @@ const createUser = async (user) => {
       TBL_USERS
       (
         ID_USER,
+        TOKEN,
         FIRST_NAME,
         LAST_NAME,
         EMAIL,
@@ -62,11 +65,12 @@ const createUser = async (user) => {
         ACTIVE,
         PROFILE_PICTURE
       )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   const passwordHash = await hash(user.PASSWORD, 10);
   const values = [
     user.ID_USER,
+    uuid(),
     user.FIRST_NAME,
     user.LAST_NAME,
     user.EMAIL,
@@ -112,6 +116,7 @@ const updateUser = async (id, user) => {
       UPDATE
         TBL_USERS
       SET
+        TOKEN = ?,
         FIRST_NAME = ?,
         LAST_NAME = ?,
         EMAIL = ?,
@@ -122,7 +127,8 @@ const updateUser = async (id, user) => {
       WHERE
         ID_USER = ?
     `;
-    values.splice(3, 0, passwordHash);
+    values.splice(0, 0, uuid());
+    values.splice(4, 0, passwordHash);
   }
   const results = await db(sql, values);
   if (results.affectedRows === 0) {

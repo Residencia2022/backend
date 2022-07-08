@@ -2,11 +2,11 @@ import { getUser } from '../controllers/users.controller.js';
 import Boom from '@hapi/boom';
 
 const validateSession = async (req, res, next) => {
-  const id = req.headers.id_user;
-  if (!id) {
+  const token = req.headers.token;
+  if (!token) {
     next(Boom.unauthorized('No session'));
   }
-  const user = await getUser(id);
+  const user = await getUser(token);
   if (!user) {
     next(Boom.unauthorized('Invalid session'));
   }
