@@ -38,7 +38,7 @@ const getUser = async (id) => {
     WHERE
       ID_USER = ?
   `;
-  const values = [id];
+  const values = [id ? id : ''];
   const results = await db(sql, values);
   return results[0] || null;
 };
