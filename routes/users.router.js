@@ -76,7 +76,7 @@ usersRouter.delete(
     try {
       const id = req.params.ID_USER;
       const deletedUser = await deleteUser(id);
-      res.status(200).json({ data: deletedUser });
+      res.json({ data: deletedUser });
     } catch (error) {
       next(error);
     }
