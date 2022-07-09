@@ -6,7 +6,7 @@ const LAST_NAME = Joi.string().min(3).max(100);
 const EMAIL = Joi.string().max(50).email();
 const PASSWORD = Joi.string().min(8).max(16);
 const ID_PRODUCT_LINE = Joi.number().integer().min(1).max(6);
-const ACTIVE = Joi.boolean();
+const ACTIVE = Joi.number().integer().min(0).max(1);
 const PROFILE_PICTURE = Joi.string().min(0).max(100);
 
 const createUserSchema = Joi.object({
@@ -21,7 +21,7 @@ const createUserSchema = Joi.object({
 });
 
 const getUserSchema = Joi.object({
-  ID_USER: ID_USER.required(),
+  id: ID_USER.required(),
 });
 
 const updateUserSchema = Joi.object({
@@ -34,8 +34,4 @@ const updateUserSchema = Joi.object({
   PROFILE_PICTURE: PROFILE_PICTURE,
 });
 
-const deleteUserSchema = Joi.object({
-  ID_USER: ID_USER.required(),
-});
-
-export { createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema };
+export { createUserSchema, getUserSchema, updateUserSchema };

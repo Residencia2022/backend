@@ -4,11 +4,10 @@ import {
   createUserSchema,
   getUserSchema,
   updateUserSchema,
-  deleteUserSchema,
 } from '../schemas/users.schema.js';
 import {
   getUsers,
-  getUser,
+  getUserById,
   createUser,
   updateUser,
   deleteUser,
@@ -26,12 +25,12 @@ usersRouter.get('/', async (req, res) => {
 });
 
 usersRouter.get(
-  '/:ID_USER',
+  '/:id',
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.ID_USER;
-      const user = await getUser(id);
+      const id = req.params.id;
+      const user = await getUserById(id);
       res.json({ data: user });
     } catch (error) {
       next(error);
@@ -54,12 +53,12 @@ usersRouter.post(
 );
 
 usersRouter.put(
-  '/:ID_USER',
+  '/:id',
   validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const id = req.params.ID_USER;
+      const id = req.params.id;
       const user = req.body;
       const updatedUser = await updateUser(id, user);
       res.json({ data: updatedUser });
@@ -70,11 +69,11 @@ usersRouter.put(
 );
 
 usersRouter.delete(
-  '/:ID_USER',
-  validatorHandler(deleteUserSchema, 'params'),
+  '/:id',
+  validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.ID_USER;
+      const id = req.params.id;
       const deletedUser = await deleteUser(id);
       res.json({ data: deletedUser });
     } catch (error) {

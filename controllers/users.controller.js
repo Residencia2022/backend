@@ -1,7 +1,7 @@
 import db from '../utils/db.util.js';
 import Boom from '@hapi/boom';
 import { hash } from 'bcrypt';
-import { uuid } from 'uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 
 const getUsers = async () => {
   const sql = `
@@ -23,7 +23,7 @@ const getUsers = async () => {
   return results;
 };
 
-const getUser = async (id) => {
+const getUserById = async (id) => {
   const sql = `
     SELECT
       ID_USER,
@@ -37,17 +37,38 @@ const getUser = async (id) => {
     FROM
       TBL_USERS
     WHERE
-      ID_USER = ? OR
-      TOKEN = ?
+      ID_USER = ?
   `;
-  const values = [id ? id : '', id ? id : ''];
+  const values = [id];
+  const results = await db(sql, values);
+  return results[0] || null;
+};
+
+const getUserByToken = async (token) => {
+  const sql = `
+    SELECT
+      ID_USER,
+      FIRST_NAME,
+      LAST_NAME,
+      EMAIL,
+      ID_PRODUCT_LINE,
+      ACTIVE,
+      PROFILE_PICTURE,
+      ROL
+    FROM
+      TBL_USERS
+    WHERE
+      TOKEN = ? AND
+      ACTIVE = 1
+  `;
+  const values = [token];
   const results = await db(sql, values);
   return results[0] || null;
 };
 
 const createUser = async (user) => {
   const id = user.ID_USER;
-  const userExists = await getUser(id);
+  const userExists = await getUserById(id);
   if (userExists) {
     throw Boom.conflict('User already exists');
   }
@@ -70,14 +91,14 @@ const createUser = async (user) => {
   const passwordHash = await hash(user.PASSWORD, 10);
   const values = [
     user.ID_USER,
-    uuid(),
+    uuidv4(),
     user.FIRST_NAME,
     user.LAST_NAME,
     user.EMAIL,
     passwordHash,
     user.ID_PRODUCT_LINE,
-    user.ACTIVE ? 1 : 0,
-    user.PROFILE_PICTURE,
+    user.ACTIVE,
+    user.PROFILE_PICTURE ? user.PROFILE_PICTURE : '',
   ];
   const results = await db(sql, values);
   if (results.affectedRows === 0) {
@@ -87,49 +108,30 @@ const createUser = async (user) => {
 };
 
 const updateUser = async (id, user) => {
-  let sql = `
+  if (user.PASSWORD) {
+    const passwordHash = await hash(user.PASSWORD, 10);
+    user.PASSWORD = passwordHash;
+    user.TOKEN = uuidv4();
+  }
+  const fields = [
+    user.TOKEN ? `TOKEN = '${user.TOKEN}'` : null,
+    user.FIRST_NAME ? `FIRST_NAME = '${user.FIRST_NAME}'` : null,
+    user.LAST_NAME ? `LAST_NAME = '${user.LAST_NAME}'` : null,
+    user.EMAIL ? `EMAIL = '${user.EMAIL}'` : null,
+    user.PASSWORD ? `PASSWORD = '${user.PASSWORD}'` : null,
+    user.ID_PRODUCT_LINE ? `ID_PRODUCT_LINE = ${user.ID_PRODUCT_LINE}` : null,
+    user.ACTIVE !== undefined ? `ACTIVE = ${user.ACTIVE}` : null,
+    user.PROFILE_PICTURE ? `PROFILE_PICTURE = '${user.PROFILE_PICTURE}'` : null,
+  ];
+  const sql = `
     UPDATE
       TBL_USERS
     SET
-      FIRST_NAME = ?,
-      LAST_NAME = ?,
-      EMAIL = ?,
-      ID_PRODUCT_LINE = ?,
-      ACTIVE = ?,
-      PROFILE_PICTURE = ?
+      ${fields.filter(Boolean).join(', ')}
     WHERE
       ID_USER = ?
   `;
-  const values = [
-    user.FIRST_NAME,
-    user.LAST_NAME,
-    user.EMAIL,
-    user.ID_PRODUCT_LINE,
-    user.ACTIVE ? 1 : 0,
-    user.PROFILE_PICTURE,
-    id,
-  ];
-  const newPassword = user.PASSWORD || '';
-  if (newPassword.trim()) {
-    const passwordHash = await hash(newPassword, 10);
-    sql = `
-      UPDATE
-        TBL_USERS
-      SET
-        TOKEN = ?,
-        FIRST_NAME = ?,
-        LAST_NAME = ?,
-        EMAIL = ?,
-        PASSWORD = ?,
-        ID_PRODUCT_LINE = ?,
-        ACTIVE = ?,
-        PROFILE_PICTURE = ?
-      WHERE
-        ID_USER = ?
-    `;
-    values.splice(0, 0, uuid());
-    values.splice(4, 0, passwordHash);
-  }
+  const values = [id];
   const results = await db(sql, values);
   if (results.affectedRows === 0) {
     throw Boom.conflict('User could not be updated');
@@ -142,9 +144,16 @@ const deleteUser = async (id) => {
   const values = [id];
   const results = await db(sql, values);
   if (results.affectedRows === 0) {
-    throw Boom.conflict('User could not be deleted');
+    throw Boom.conflict('User could not be archived');
   }
-  return 'User deleted successfully';
+  return 'User archived successfully';
 };
 
-export { getUsers, getUser, createUser, updateUser, deleteUser };
+export {
+  getUsers,
+  getUserById,
+  getUserByToken,
+  createUser,
+  updateUser,
+  deleteUser,
+};

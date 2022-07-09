@@ -5,11 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import {
-  logError,
-  errorHandler,
-  boomErrorHandler,
-} from './middlewares/error.handler.js';
+import { logError, errorHandler } from './middlewares/error.handler.js';
 import { loginRouter, apiRouter } from './routes/index.js';
 import validateSession from './middlewares/session.handler.js';
 
@@ -23,7 +19,6 @@ app.use('/login', loginRouter);
 app.use('/api', validateSession, apiRouter);
 
 app.use(logError);
-app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
