@@ -114,14 +114,18 @@ const updateUser = async (id, user) => {
     user.TOKEN = uuidv4();
   }
   const fields = [
-    user.TOKEN ? `TOKEN = '${user.TOKEN}'` : null,
-    user.FIRST_NAME ? `FIRST_NAME = '${user.FIRST_NAME}'` : null,
-    user.LAST_NAME ? `LAST_NAME = '${user.LAST_NAME}'` : null,
-    user.EMAIL ? `EMAIL = '${user.EMAIL}'` : null,
-    user.PASSWORD ? `PASSWORD = '${user.PASSWORD}'` : null,
-    user.ID_PRODUCT_LINE ? `ID_PRODUCT_LINE = ${user.ID_PRODUCT_LINE}` : null,
-    user.ACTIVE !== undefined ? `ACTIVE = ${user.ACTIVE}` : null,
-    user.PROFILE_PICTURE ? `PROFILE_PICTURE = '${user.PROFILE_PICTURE}'` : null,
+    user.TOKEN !== undefined ? `TOKEN = '${user.TOKEN}'` : false,
+    user.FIRST_NAME !== undefined ? `FIRST_NAME = '${user.FIRST_NAME}'` : false,
+    user.LAST_NAME !== undefined ? `LAST_NAME = '${user.LAST_NAME}'` : false,
+    user.EMAIL !== undefined ? `EMAIL = '${user.EMAIL}'` : false,
+    user.PASSWORD !== undefined ? `PASSWORD = '${user.PASSWORD}'` : false,
+    user.ID_PRODUCT_LINE !== undefined
+      ? `ID_PRODUCT_LINE = ${user.ID_PRODUCT_LINE}`
+      : false,
+    user.ACTIVE !== undefined ? `ACTIVE = ${user.ACTIVE}` : false,
+    user.PROFILE_PICTURE !== undefined
+      ? `PROFILE_PICTURE = '${user.PROFILE_PICTURE}'`
+      : false,
   ];
   const sql = `
     UPDATE
