@@ -1,4 +1,5 @@
 import express from 'express';
+import fileUpload from 'express-fileupload';
 
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -6,17 +7,18 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { logError, errorHandler } from './middlewares/error.handler.js';
-import { loginRouter, apiRouter } from './routes/index.js';
-import validateSession from './middlewares/session.handler.js';
+import { sessionsRouter, apiRouter } from './routes/index.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
-app.use('/login', loginRouter);
-app.use('/api', validateSession, apiRouter);
+app.use('/login', sessionsRouter);
+app.use('/api', apiRouter);
+app.use('/files', express.static('uploads'));
 
 app.use(logError);
 app.use(errorHandler);
