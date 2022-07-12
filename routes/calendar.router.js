@@ -6,6 +6,8 @@ import {
 } from '../schemas/calendar.schema.js';
 import {
   createCalendar,
+  getCalendar,
+  getCalendarByMonth,
   deleteCalendar,
 } from '../controllers/calendar.controller.js';
 
@@ -24,6 +26,26 @@ calendarRouter.post(
     }
   }
 );
+
+calendarRouter.get('/', async (req, res) => {
+  try {
+    const calendar = await getCalendar();
+    res.json({ data: calendar });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+calendarRouter.get('/:year/:month', async (req, res, next) => {
+  try {
+    const year = req.params.year;
+    const month = req.params.month;
+    const calendar = await getCalendarByMonth(year, month);
+    res.json({ data: calendar });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 calendarRouter.delete(
   '/:id',

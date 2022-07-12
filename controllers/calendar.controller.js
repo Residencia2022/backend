@@ -28,6 +28,31 @@ const createCalendar = async (calendar) => {
   return 'Calendar created successfully';
 };
 
+const getCalendarByMonth = async (year, month) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      TBL_CALENDAR
+    WHERE
+      DATES LIKE ?
+  `;
+  const values = [`%${year}-${month}%`];
+  const results = await db(sql, values);
+  return results;
+};
+
+const getCalendar = async () => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      TBL_CALENDAR
+  `;
+  const results = await db(sql);
+  return results;
+};
+
 const deleteCalendar = async (id) => {
   const sql = 'DELETE FROM TBL_CALENDAR WHERE ID_CALENDAR = ?';
   const values = [id];
@@ -38,4 +63,4 @@ const deleteCalendar = async (id) => {
   return 'Calendar deleted successfully';
 };
 
-export { createCalendar, deleteCalendar };
+export { createCalendar, getCalendarByMonth, getCalendar, deleteCalendar };
