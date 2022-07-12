@@ -28,4 +28,29 @@ const createCalendar = async (calendar) => {
   return 'Calendar created successfully';
 };
 
-export { createCalendar };
+const getCalendarByMonth = async (year, month) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      TBL_CALENDAR
+    WHERE
+      DATES LIKE ?
+  `;
+  const values = [`%${year}-${month}%`];
+  const results = await db(sql, values);
+  return results;
+}
+
+const getCalendar = async () => {
+  const sql = `
+    SELECT
+    *
+    FROM
+      TBL_CALENDAR
+  `;
+  const results = await db(sql);
+  return results;
+}
+
+export { createCalendar, getCalendar, getCalendarByMonth };
