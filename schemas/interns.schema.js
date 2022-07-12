@@ -27,4 +27,8 @@ const createInternSchema = Joi.object({
   CV: CV.required(),
 });
 
-export { createInternSchema };
+const deleteInternSchema = Joi.object({
+  ID_INTERN: ID_INTERN.required(),
+})
+
+export { createInternSchema, deleteInternSchema };
