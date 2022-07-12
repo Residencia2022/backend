@@ -28,4 +28,14 @@ const createCalendar = async (calendar) => {
   return 'Calendar created successfully';
 };
 
-export { createCalendar };
+const deleteCalendar = async (id) => {
+  const sql = 'DELETE FROM TBL_CALENDAR WHERE ID_CALENDAR = ?';
+  const values = [id];
+  const results = await db(sql, values);
+  if (results.affectedRows === 0) {
+    throw Boom.conflict('Calendar could not be deleted');
+  }
+  return 'Calendar deleted successfully';
+};
+
+export { createCalendar, deleteCalendar };
