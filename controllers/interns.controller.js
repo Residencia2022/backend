@@ -42,4 +42,15 @@ const createIntern = async (intern) => {
   return 'Successful application';
 };
 
-export { createIntern };
+const deleteIntern = async (id) => {
+  const sql = 'DELETE FROM TBL_INTERNS WHERE ID_INTERN = ?';
+  const values = [id];
+  const results = await db(sql, values);
+  if (results.affectedRows === 0) {
+    throw Boom.conflict('Intern could not be deleted');
+  }
+  return 'Intern deleted successfully';
+};
+
+
+export { createIntern, deleteIntern };
