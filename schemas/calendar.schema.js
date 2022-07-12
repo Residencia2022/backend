@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+const ID_CALENDAR = Joi.number().integer().min(0);
 const ID_PRODUCT_LINE = Joi.number().integer().min(1).max(6);
 const ID_SCHEDULE = Joi.number().integer().min(1).max(4);
 const EMPLOYEE = Joi.string().min(1).max(50);
@@ -12,4 +13,8 @@ const createCalendarSchema = Joi.object({
   DATES: DATES.required(),
 });
 
-export { createCalendarSchema };
+const getCalendarSchema = Joi.object({
+  id: ID_CALENDAR.required(),
+});
+
+export { createCalendarSchema, getCalendarSchema };

@@ -40,17 +40,27 @@ const getCalendarByMonth = async (year, month) => {
   const values = [`%${year}-${month}%`];
   const results = await db(sql, values);
   return results;
-}
+};
 
 const getCalendar = async () => {
   const sql = `
     SELECT
-    *
+      *
     FROM
       TBL_CALENDAR
   `;
   const results = await db(sql);
   return results;
-}
+};
 
-export { createCalendar, getCalendar, getCalendarByMonth };
+const deleteCalendar = async (id) => {
+  const sql = 'DELETE FROM TBL_CALENDAR WHERE ID_CALENDAR = ?';
+  const values = [id];
+  const results = await db(sql, values);
+  if (results.affectedRows === 0) {
+    throw Boom.conflict('Calendar could not be deleted');
+  }
+  return 'Calendar deleted successfully';
+};
+
+export { createCalendar, getCalendarByMonth, getCalendar, deleteCalendar };
