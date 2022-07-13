@@ -1,6 +1,5 @@
 import db from '../utils/db.util.js';
 import Boom from '@hapi/boom';
-import { getUserById, getUsers } from './users.controller.js';
 
 const createIntern = async (intern) => {
   const sql = `
@@ -48,9 +47,9 @@ const deleteIntern = async (id) => {
   const values = [id];
   const results = await db(sql, values);
   if (results.affectedRows === 0) {
-    throw Boom.conflict('Intern could not be deleted');
+    throw Boom.conflict('An error has occurred, please try again later');
   }
-  return 'Intern deleted successfully';
+  return 'Application deleted successfully';
 };
 
 const getIntern = async (id) => {
@@ -58,9 +57,15 @@ const getIntern = async (id) => {
   const values = [id];
   const results = await db(sql, values);
   if (!results[0]) {
-    throw Boom.notFound('This id number does not exist');
+    throw Boom.notFound('Application not found');
   }
   return results[0];
 };
 
-export { createIntern, deleteIntern, getIntern };
+const getInterns = async () => {
+  const sql = 'SELECT * FROM TBL_INTERNS';
+  const results = await db(sql);
+  return results;
+};
+
+export { createIntern, deleteIntern, getIntern, getInterns };

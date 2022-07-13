@@ -23,9 +23,9 @@ const createCalendar = async (calendar) => {
   ];
   const results = await db(sql, values);
   if (results.affectedRows === 0) {
-    throw Boom.conflict('Calendar could not be created');
+    throw Boom.conflict('Event could not be created');
   }
-  return 'Calendar created successfully';
+  return 'Event created successfully';
 };
 
 const getCalendarByMonth = async (year, month) => {
@@ -58,9 +58,9 @@ const deleteCalendar = async (id) => {
   const values = [id];
   const results = await db(sql, values);
   if (results.affectedRows === 0) {
-    throw Boom.conflict('Calendar could not be deleted');
+    throw Boom.conflict('Event could not be deleted');
   }
-  return 'Calendar deleted successfully';
+  return 'Event deleted successfully';
 };
 
 export { createCalendar, getCalendarByMonth, getCalendar, deleteCalendar };

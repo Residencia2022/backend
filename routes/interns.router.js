@@ -1,8 +1,15 @@
 import { Router } from 'express';
 import validatorHandler from '../middlewares/validator.handler.js';
-import { createInternSchema, deleteInternSchema, getInternSchema } from '../schemas/interns.schema.js';
-import { createIntern, deleteIntern, getIntern } from '../controllers/interns.controller.js';
-
+import {
+  createInternSchema,
+  getInternSchema,
+} from '../schemas/interns.schema.js';
+import {
+  createIntern,
+  deleteIntern,
+  getIntern,
+  getInterns,
+} from '../controllers/interns.controller.js';
 
 const internsRouter = Router();
 
@@ -21,11 +28,11 @@ internsRouter.post(
 );
 
 internsRouter.delete(
-  '/:ID_INTERN',
-  validatorHandler(deleteInternSchema, 'params'),
+  '/:id',
+  validatorHandler(getInternSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.ID_INTERN;
+      const id = req.params.id;
       const deletedIntern = await deleteIntern(id);
       res.json({ data: deletedIntern });
     } catch (error) {
@@ -35,17 +42,26 @@ internsRouter.delete(
 );
 
 internsRouter.get(
-  '/:ID_INTERN',
+  '/:id',
   validatorHandler(getInternSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.ID_INTERN;
-      const getedIntern = await getIntern(id);
-      res.json({ data: getedIntern });
+      const id = req.params.id;
+      const intern = await getIntern(id);
+      res.json({ data: intern });
     } catch (error) {
       next(error);
     }
   }
 );
+
+internsRouter.get('/', async (req, res) => {
+  try {
+    const interns = await getInterns();
+    res.json({ data: interns });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 export default internsRouter;
