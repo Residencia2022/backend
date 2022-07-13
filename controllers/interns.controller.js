@@ -1,5 +1,6 @@
 import db from '../utils/db.util.js';
 import Boom from '@hapi/boom';
+import { getUserById, getUsers } from './users.controller.js';
 
 const createIntern = async (intern) => {
   const sql = `
@@ -52,5 +53,14 @@ const deleteIntern = async (id) => {
   return 'Intern deleted successfully';
 };
 
+const getIntern = async (id) => {
+  const sql = 'SELECT * FROM TBL_INTERNS WHERE ID_INTERN = ?';
+  const values = [id];
+  const results = await db(sql, values);
+  if (!results[0]) {
+    throw Boom.notFound('This id number does not exist');
+  }
+  return results[0];
+};
 
-export { createIntern, deleteIntern };
+export { createIntern, deleteIntern, getIntern };
