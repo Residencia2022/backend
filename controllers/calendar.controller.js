@@ -31,11 +31,24 @@ const createCalendar = async (calendar) => {
 const getCalendarByMonth = async (year, month) => {
   const sql = `
     SELECT
-      *
+      C.ID_CALENDAR,
+      C.ID_PRODUCT_LINE,
+      P.PRODUCT_LINE,
+      C.ID_SCHEDULE,
+      S.LABEL,
+      S.START_TIME,
+      S.END_TIME,
+      C.EMPLOYEE,
+      C.DATES
     FROM
-      TBL_CALENDAR
+      TBL_CALENDAR C
+    INNER JOIN
+      TBL_PRODUCT_LINES P ON C.ID_PRODUCT_LINE = P.ID_PRODUCT_LINE
+    INNER JOIN
+      TBL_SCHEDULES S ON C.ID_SCHEDULE = S.ID_SCHEDULE
     WHERE
       DATES LIKE ?
+    ORDER BY C.DATES ASC
   `;
   const values = [`%${year}-${month}%`];
   const results = await db(sql, values);
@@ -45,9 +58,22 @@ const getCalendarByMonth = async (year, month) => {
 const getCalendar = async () => {
   const sql = `
     SELECT
-      *
+      C.ID_CALENDAR,
+      C.ID_PRODUCT_LINE,
+      P.PRODUCT_LINE,
+      C.ID_SCHEDULE,
+      S.LABEL,
+      S.START_TIME,
+      S.END_TIME,
+      C.EMPLOYEE,
+      C.DATES
     FROM
-      TBL_CALENDAR
+      TBL_CALENDAR C
+    INNER JOIN
+      TBL_PRODUCT_LINES P ON C.ID_PRODUCT_LINE = P.ID_PRODUCT_LINE
+    INNER JOIN
+      TBL_SCHEDULES S ON C.ID_SCHEDULE = S.ID_SCHEDULE
+    ORDER BY C.DATES ASC
   `;
   const results = await db(sql);
   return results;

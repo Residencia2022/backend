@@ -15,21 +15,21 @@ import {
 
 const usersRouter = Router();
 
-usersRouter.get('/', async (req, res) => {
+usersRouter.get('/', async (req, res, next) => {
   try {
     const users = await getUsers();
     res.json({ data: users });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 
 usersRouter.get(
-  '/:id',
+  '/:ID',
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = req.params.ID;
       const user = await getUserById(id);
       res.json({ data: user });
     } catch (error) {
@@ -53,12 +53,12 @@ usersRouter.post(
 );
 
 usersRouter.put(
-  '/:id',
+  '/:ID',
   validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = req.params.ID;
       const user = req.body;
       const updatedUser = await updateUser(id, user);
       res.json({ data: updatedUser });
@@ -69,11 +69,11 @@ usersRouter.put(
 );
 
 usersRouter.delete(
-  '/:id',
+  '/:ID',
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = req.params.ID;
       const deletedUser = await deleteUser(id);
       res.json({ data: deletedUser });
     } catch (error) {

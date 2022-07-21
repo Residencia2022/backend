@@ -27,12 +27,12 @@ calendarRouter.post(
   }
 );
 
-calendarRouter.get('/', async (req, res) => {
+calendarRouter.get('/', async (req, res, next) => {
   try {
     const calendar = await getCalendar();
     res.json({ data: calendar });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 
@@ -43,16 +43,16 @@ calendarRouter.get('/:year/:month', async (req, res, next) => {
     const calendar = await getCalendarByMonth(year, month);
     res.json({ data: calendar });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 
 calendarRouter.delete(
-  '/:id',
+  '/:ID',
   validatorHandler(getCalendarSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = req.params.ID;
       const deletedCalendar = await deleteCalendar(id);
       res.json({ data: deletedCalendar });
     } catch (error) {

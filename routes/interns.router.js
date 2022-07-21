@@ -28,11 +28,11 @@ internsRouter.post(
 );
 
 internsRouter.delete(
-  '/:id',
+  '/:ID',
   validatorHandler(getInternSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = req.params.ID;
       const deletedIntern = await deleteIntern(id);
       res.json({ data: deletedIntern });
     } catch (error) {
@@ -42,11 +42,11 @@ internsRouter.delete(
 );
 
 internsRouter.get(
-  '/:id',
+  '/:ID',
   validatorHandler(getInternSchema, 'params'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = req.params.ID;
       const intern = await getIntern(id);
       res.json({ data: intern });
     } catch (error) {
@@ -55,12 +55,12 @@ internsRouter.get(
   }
 );
 
-internsRouter.get('/', async (req, res) => {
+internsRouter.get('/', async (req, res, next) => {
   try {
     const interns = await getInterns();
     res.json({ data: interns });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 
