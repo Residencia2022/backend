@@ -7,6 +7,7 @@ import {
 import {
   createCalendar,
   getCalendar,
+  getCalendarByLine,
   getCalendarByMonth,
   deleteCalendar,
 } from '../controllers/calendar.controller.js';
@@ -30,6 +31,16 @@ calendarRouter.post(
 calendarRouter.get('/', async (req, res, next) => {
   try {
     const calendar = await getCalendar();
+    res.json({ data: calendar });
+  } catch (error) {
+    next(error);
+  }
+});
+
+calendarRouter.get('/:line', async (req, res, next) => {
+  try {
+    const line = req.params.line;
+    const calendar = await getCalendarByLine(line);
     res.json({ data: calendar });
   } catch (error) {
     next(error);

@@ -55,6 +55,33 @@ const getCalendarByMonth = async (year, month) => {
   return results;
 };
 
+const getCalendarByLine = async (line) => {
+  const sql = `
+    SELECT
+      C.ID_CALENDAR,
+      C.ID_PRODUCT_LINE,
+      P.PRODUCT_LINE,
+      C.ID_SCHEDULE,
+      S.LABEL,
+      S.START_TIME,
+      S.END_TIME,
+      C.EMPLOYEE,
+      C.DATES
+    FROM
+      TBL_CALENDAR C
+    INNER JOIN
+      TBL_PRODUCT_LINES P ON C.ID_PRODUCT_LINE = P.ID_PRODUCT_LINE
+    INNER JOIN
+      TBL_SCHEDULES S ON C.ID_SCHEDULE = S.ID_SCHEDULE
+    WHERE
+      C.ID_PRODUCT_LINE = ?
+    ORDER BY C.DATES ASC
+  `;
+  const values = [line];
+  const results = await db(sql, values);
+  return results;
+};
+
 const getCalendar = async () => {
   const sql = `
     SELECT
@@ -89,4 +116,10 @@ const deleteCalendar = async (id) => {
   return 'Event deleted successfully';
 };
 
-export { createCalendar, getCalendarByMonth, getCalendar, deleteCalendar };
+export {
+  createCalendar,
+  getCalendar,
+  getCalendarByLine,
+  getCalendarByMonth,
+  deleteCalendar,
+};
