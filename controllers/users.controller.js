@@ -44,28 +44,6 @@ const getUserById = async (id) => {
   return results[0] || null;
 };
 
-const getUserByToken = async (token) => {
-  const sql = `
-    SELECT
-      ID_USER,
-      FIRST_NAME,
-      LAST_NAME,
-      EMAIL,
-      ID_PRODUCT_LINE,
-      ACTIVE,
-      PROFILE_PICTURE,
-      ROL
-    FROM
-      TBL_USERS
-    WHERE
-      TOKEN = ? AND
-      ACTIVE = 1
-  `;
-  const values = [token];
-  const results = await db(sql, values);
-  return results[0] || null;
-};
-
 const createUser = async (user) => {
   const id = user.ID_USER;
   const userExists = await getUserById(id);
@@ -153,11 +131,4 @@ const deleteUser = async (id) => {
   return 'User archived successfully';
 };
 
-export {
-  getUsers,
-  getUserById,
-  getUserByToken,
-  createUser,
-  updateUser,
-  deleteUser,
-};
+export { getUsers, getUserById, createUser, updateUser, deleteUser };

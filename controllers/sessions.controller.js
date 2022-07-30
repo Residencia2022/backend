@@ -34,4 +34,29 @@ const login = async (email, password) => {
   };
 };
 
-export default login;
+const getUserByToken = async (token) => {
+  const sql = `
+    SELECT
+      ID_USER,
+      FIRST_NAME,
+      LAST_NAME,
+      EMAIL,
+      ID_PRODUCT_LINE,
+      PROFILE_PICTURE,
+      ROL
+    FROM
+      TBL_USERS
+    WHERE
+      TOKEN = ? AND
+      ACTIVE = 1
+  `;
+  const values = [token];
+  const results = await db(sql, values);
+  const user = results[0] || null;
+  if (!user) {
+    throw Boom.notFound('Invalid session');
+  }
+  return user;
+};
+
+export { login, getUserByToken };
