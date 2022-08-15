@@ -2,17 +2,57 @@ import { Router } from 'express';
 import validatorHandler from '../middlewares/validator.handler.js';
 import {
   createCalendarSchema,
-  getCalendarSchema,
+  getCalendarByDatesSchema,
+  getCalendarByLineSchema,
+  deleteCalendarSchema,
 } from '../schemas/calendar.schema.js';
 import {
   createCalendar,
   getCalendar,
+  getCalendarByDates,
   getCalendarByLine,
-  getCalendarByMonth,
   deleteCalendar,
 } from '../controllers/calendar.controller.js';
 
 const calendarRouter = Router();
+
+calendarRouter.get('/', async (req, res, next) => {
+  try {
+    const calendar = await getCalendar();
+    res.json({ data: calendar });
+  } catch (error) {
+    next(error);
+  }
+});
+
+calendarRouter.get(
+  '/:LINE',
+  validatorHandler(getCalendarByLineSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const line = req.params.LINE;
+      const calendar = await getCalendarByLine(line);
+      res.json({ data: calendar });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+calendarRouter.get(
+  '/:START/:END',
+  validatorHandler(getCalendarByDatesSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const start = req.params.START;
+      const end = req.params.END;
+      const calendar = await getCalendarByDates(start, end);
+      res.json({ data: calendar });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 calendarRouter.post(
   '/',
@@ -28,39 +68,9 @@ calendarRouter.post(
   }
 );
 
-calendarRouter.get('/', async (req, res, next) => {
-  try {
-    const calendar = await getCalendar();
-    res.json({ data: calendar });
-  } catch (error) {
-    next(error);
-  }
-});
-
-calendarRouter.get('/:line', async (req, res, next) => {
-  try {
-    const line = req.params.line;
-    const calendar = await getCalendarByLine(line);
-    res.json({ data: calendar });
-  } catch (error) {
-    next(error);
-  }
-});
-
-calendarRouter.get('/:year/:month', async (req, res, next) => {
-  try {
-    const year = req.params.year;
-    const month = req.params.month;
-    const calendar = await getCalendarByMonth(year, month);
-    res.json({ data: calendar });
-  } catch (error) {
-    next(error);
-  }
-});
-
 calendarRouter.delete(
   '/:ID',
-  validatorHandler(getCalendarSchema, 'params'),
+  validatorHandler(deleteCalendarSchema, 'params'),
   async (req, res, next) => {
     try {
       const id = req.params.ID;

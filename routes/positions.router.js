@@ -3,12 +3,12 @@ import { getPositions } from '../controllers/positions.controller.js';
 
 const positionsRouter = Router();
 
-positionsRouter.get('/', async (req, res) => {
+positionsRouter.get('/', async (req, res, next) => {
   try {
     const positions = await getPositions();
     res.json({ data: positions });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 

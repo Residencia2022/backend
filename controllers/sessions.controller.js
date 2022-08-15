@@ -2,7 +2,10 @@ import db from '../utils/db.util.js';
 import { compare } from 'bcrypt';
 import Boom from '@hapi/boom';
 
-const login = async (email, password) => {
+const getUserByEmail = async (email, password) => {
+  if (!email || !password) {
+    throw Boom.badRequest('Missing email or password');
+  }
   const sql = `
     SELECT
       *
@@ -35,6 +38,9 @@ const login = async (email, password) => {
 };
 
 const getUserByToken = async (token) => {
+  if (!token) {
+    throw Boom.badRequest('Missing token');
+  }
   const sql = `
     SELECT
       ID_USER,
@@ -59,4 +65,4 @@ const getUserByToken = async (token) => {
   return user;
 };
 
-export { login, getUserByToken };
+export { getUserByEmail, getUserByToken };

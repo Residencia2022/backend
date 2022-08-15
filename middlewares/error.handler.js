@@ -1,9 +1,5 @@
-const logError = (err, req, res, next) => {
-  console.error(err.message);
-  next(err);
-};
-
 const errorHandler = (err, req, res, next) => {
+  console.error(err.message);
   if (err.isBoom) {
     res.status(err.output.statusCode).json({
       error: err.output.payload.message,
@@ -15,4 +11,4 @@ const errorHandler = (err, req, res, next) => {
   }
 };
 
-export { logError, errorHandler };
+export default errorHandler;

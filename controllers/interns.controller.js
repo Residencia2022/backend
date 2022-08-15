@@ -1,6 +1,22 @@
 import db from '../utils/db.util.js';
 import Boom from '@hapi/boom';
 
+const getInterns = async () => {
+  const sql = 'SELECT * FROM TBL_INTERNS';
+  const results = await db(sql);
+  return results;
+};
+
+const getInternById = async (id) => {
+  const sql = 'SELECT * FROM TBL_INTERNS WHERE ID_INTERN = ?';
+  const values = [id];
+  const results = await db(sql, values);
+  if (!results[0]) {
+    throw Boom.notFound('Application not found');
+  }
+  return results[0];
+};
+
 const createIntern = async (intern) => {
   const sql = `
     INSERT INTO
@@ -52,20 +68,4 @@ const deleteIntern = async (id) => {
   return 'Application deleted successfully';
 };
 
-const getIntern = async (id) => {
-  const sql = 'SELECT * FROM TBL_INTERNS WHERE ID_INTERN = ?';
-  const values = [id];
-  const results = await db(sql, values);
-  if (!results[0]) {
-    throw Boom.notFound('Application not found');
-  }
-  return results[0];
-};
-
-const getInterns = async () => {
-  const sql = 'SELECT * FROM TBL_INTERNS';
-  const results = await db(sql);
-  return results;
-};
-
-export { createIntern, deleteIntern, getIntern, getInterns };
+export { getInterns, getInternById, createIntern, deleteIntern };

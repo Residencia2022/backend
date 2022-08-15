@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { logError, errorHandler } from './middlewares/error.handler.js';
+import errorHandler from './middlewares/error.handler.js';
 import { sessionsRouter, apiRouter } from './routes/index.js';
 
 const app = express();
@@ -20,7 +20,6 @@ app.use('/login', sessionsRouter);
 app.use('/api', apiRouter);
 app.use('/files', express.static('uploads'));
 
-app.use(logError);
 app.use(errorHandler);
 
 app.listen(port, () => {

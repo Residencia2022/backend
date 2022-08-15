@@ -1,13 +1,13 @@
-import { getUserByToken } from '../controllers/sessions.controller.js';
 import Boom from '@hapi/boom';
+import { getUserByToken } from '../controllers/sessions.controller.js';
 
 const validateSession = async (req, res, next) => {
-  const token = req.headers.token;
-  if (!token) {
-    next(Boom.unauthorized('No session'));
-    return;
-  }
   try {
+    const token = req.headers.token;
+    if (!token) {
+      next(Boom.unauthorized('No session'));
+      return;
+    }
     await getUserByToken(token);
     next();
   } catch (error) {

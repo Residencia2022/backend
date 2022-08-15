@@ -1,10 +1,4 @@
 import { Router } from 'express';
-import validatorHandler from '../middlewares/validator.handler.js';
-import {
-  createUserSchema,
-  getUserSchema,
-  updateUserSchema,
-} from '../schemas/users.schema.js';
 import {
   getUsers,
   getUserById,
@@ -12,6 +6,12 @@ import {
   updateUser,
   deleteUser,
 } from '../controllers/users.controller.js';
+import validatorHandler from '../middlewares/validator.handler.js';
+import {
+  createUserSchema,
+  getUserSchema,
+  updateUserSchema,
+} from '../schemas/users.schema.js';
 
 const usersRouter = Router();
 
