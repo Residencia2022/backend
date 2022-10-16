@@ -1,4 +1,7 @@
 import { createConnection } from 'mysql2/promise';
+import { readFileSync } from 'fs';
+
+const DB_CA = [readFileSync('./DigiCertGlobalRootCA.crt.pem', 'utf8')];
 
 const db = async (sql, values) => {
   const connection = await createConnection({
@@ -7,6 +10,10 @@ const db = async (sql, values) => {
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
+    ssl: {
+      rejectUnauthorized: true,
+      ca: DB_CA,
+    },
   });
   const [results] = await connection.execute(sql, values);
   await connection.end();
@@ -14,5 +21,3 @@ const db = async (sql, values) => {
 };
 
 export default db;
-
-// Server parameters: require_secure_transport=OFF
