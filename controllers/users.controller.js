@@ -6,16 +6,21 @@ import { v4 as uuidv4 } from 'uuid';
 const getUsers = async () => {
   const sql = `
     SELECT
-      ID_USER,
-      FIRST_NAME,
-      LAST_NAME,
-      EMAIL,
-      ID_PRODUCT_LINE,
-      ACTIVE,
-      PROFILE_PICTURE,
-      ROL
+      U.ID_USER,
+      U.FIRST_NAME,
+      U.LAST_NAME,
+      U.EMAIL,
+      U.ID_PRODUCT_LINE,
+      P.PRODUCT_LINE,
+      U.ACTIVE,
+      U.PROFILE_PICTURE,
+      U.ROL
     FROM
-      TBL_USERS
+      TBL_USERS U
+    INNER JOIN
+      TBL_PRODUCT_LINES P
+    ON
+      U.ID_PRODUCT_LINE = P.ID_PRODUCT_LINE
     ORDER BY
       ID_PRODUCT_LINE ASC
   `;
