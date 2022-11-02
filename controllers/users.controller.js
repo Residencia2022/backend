@@ -17,7 +17,7 @@ const getUsers = async () => {
       U.ROL
     FROM
       TBL_USERS U
-    INNER JOIN
+    LEFT JOIN
       TBL_PRODUCT_LINES P
     ON
       U.ID_PRODUCT_LINE = P.ID_PRODUCT_LINE
