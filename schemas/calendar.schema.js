@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 const ID_CALENDAR = Joi.number().integer().min(0);
 const ID_PRODUCT_LINE = Joi.number().integer().min(1).max(6);
-const ID_SCHEDULE = Joi.number().integer().min(1).max(4);
+const ID_SCHEDULE = Joi.number().integer().min(1).max(5);
 const EMPLOYEE = Joi.string().min(2).max(250);
 const DATES = Joi.date();
 
