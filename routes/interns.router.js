@@ -58,7 +58,7 @@ internsRouter.patch(
   async (req, res, next) => {
     try {
       const id = req.params.ID;
-      const status = req.body.CURRENT_STATUS;
+      const status = req.body.status;
       const updatedIntern = await updateIntern(id, status);
       res.json({ data: updatedIntern });
     } catch (error) {
