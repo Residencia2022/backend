@@ -12,6 +12,7 @@ const ID_POSITION = Joi.number().integer().min(1).max(3);
 const PHONE_NUMBER = Joi.string().length(13);
 const EMAIL = Joi.string().max(100).email();
 const CV = Joi.string().max(100).uri();
+const STATUS = Joi.string().valid('pending', 'accepted', 'rejected');
 
 const createInternSchema = Joi.object({
   FIRST_NAME: FIRST_NAME.required(),
@@ -27,8 +28,13 @@ const createInternSchema = Joi.object({
   CV: CV.required(),
 });
 
+const updateInternSchema = Joi.object({
+  STATUS: STATUS.required(),
+  ID: ID_INTERN.required(),
+});
+
 const getInternSchema = Joi.object({
   ID: ID_INTERN.required(),
 });
 
-export { createInternSchema, getInternSchema };
+export { createInternSchema, updateInternSchema, getInternSchema };

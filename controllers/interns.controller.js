@@ -58,6 +58,16 @@ const createIntern = async (intern) => {
   return 'Successful application';
 };
 
+const updateIntern = async (id, status) => {
+  const sql = 'UPDATE TBL_INTERNS SET CURRENT_STATUS = ? WHERE ID_INTERN = ?';
+  const values = [status, id];
+  const results = await db(sql, values);
+  if (results.affectedRows === 0) {
+    throw Boom.conflict('An error has occurred, please try again later');
+  }
+  return 'Application updated successfully';
+};
+
 const deleteIntern = async (id) => {
   const sql = 'DELETE FROM TBL_INTERNS WHERE ID_INTERN = ?';
   const values = [id];
@@ -68,4 +78,4 @@ const deleteIntern = async (id) => {
   return 'Application deleted successfully';
 };
 
-export { getInterns, getInternById, createIntern, deleteIntern };
+export { getInterns, getInternById, createIntern, updateIntern, deleteIntern };
