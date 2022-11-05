@@ -24,7 +24,6 @@ const createIntern = async (intern) => {
       (
         ID_INTERN,
         FIRST_NAME,
-        LAST_NAME,
         DEGREE,
         INTEREST,
         MOTIVATION,
@@ -36,11 +35,10 @@ const createIntern = async (intern) => {
         CV
       )
     VALUES
-      (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   const values = [
     intern.FIRST_NAME,
-    intern.LAST_NAME,
     intern.DEGREE,
     intern.INTEREST,
     intern.MOTIVATION,
