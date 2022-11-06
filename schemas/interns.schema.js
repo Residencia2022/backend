@@ -3,6 +3,7 @@ import Joi from 'joi';
 const ID_INTERN = Joi.number().integer().min(0);
 const FIRST_NAME = Joi.string().min(2).max(100);
 const DEGREE = Joi.string().min(2).max(100);
+const SCHOOL = Joi.string().min(2).max(250);
 const INTEREST = Joi.string().min(2).max(250);
 const MOTIVATION = Joi.string().min(2).max(250);
 const EXPERIENCE = Joi.string().min(2).max(250);
@@ -16,6 +17,7 @@ const STATUS = Joi.string().valid('pending', 'accepted', 'rejected');
 const createInternSchema = Joi.object({
   FIRST_NAME: FIRST_NAME.required(),
   DEGREE: DEGREE.required(),
+  SCHOOL: SCHOOL.required(),
   INTEREST: INTEREST.required(),
   MOTIVATION: MOTIVATION.required(),
   EXPERIENCE: EXPERIENCE.required(),
