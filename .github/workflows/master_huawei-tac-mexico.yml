@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'huawei-tac-mexico'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B0770908B4B64CA69D5B6B693E27ABFE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_999938A8753D4AF180310E3566810496 }}
           package: .
