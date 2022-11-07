@@ -2,7 +2,25 @@ import db from '../utils/db.util.js';
 import Boom from '@hapi/boom';
 
 const getInterns = async () => {
-  const sql = 'SELECT * FROM TBL_INTERNS';
+  const sql = `
+    SELECT
+      I.ID_INTERN,
+      I.FIRST_NAME,
+      I.DEGREE,
+      I.SCHOOL,
+      I.INTEREST,
+      I.MOTIVATION,
+      I.EXPERIENCE,
+      I.ENGLISH_LEVEL,
+      P.POSITION,
+      I.PHONE_NUMBER,
+      I.EMAIL,
+      I.CV,
+      I.CURRENT_STATUS
+    FROM
+      TBL_INTERNS I
+    INNER JOIN
+      TBL_POSITIONS P ON I.ID_POSITION = P.ID_POSITION`;
   const results = await db(sql);
   return results;
 };
