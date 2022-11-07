@@ -30,7 +30,6 @@ const createInternSchema = Joi.object({
 
 const updateInternSchema = Joi.object({
   STATUS: STATUS.required(),
-  ID: ID_INTERN.required(),
 });
 
 const getInternSchema = Joi.object({

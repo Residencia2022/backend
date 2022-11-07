@@ -54,6 +54,7 @@ internsRouter.post(
 
 internsRouter.patch(
   '/:ID',
+  validatorHandler(getInternSchema, 'params'),
   validatorHandler(updateInternSchema, 'body'),
   async (req, res, next) => {
     try {
